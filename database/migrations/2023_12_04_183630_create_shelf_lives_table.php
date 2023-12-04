@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('shelf_lives', function (Blueprint $table) {
             $table->id();
+            // 外部キー
+            $table->unsignedBigInteger('treat_id');
+            // カラム
+            $table->date('shelf_life');
+            $table->string('shelf_life_status');
+
             $table->timestamps();
         });
     }

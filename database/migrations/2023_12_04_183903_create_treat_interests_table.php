@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('treat_interests', function (Blueprint $table) {
             $table->id();
+            // 上二つは外部キー
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('treat_id');
+            // デフォルトでリジェクトする
+            $table->boolean('is_rejected')->default(true);
+
             $table->timestamps();
         });
     }

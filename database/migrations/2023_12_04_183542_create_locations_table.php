@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('locations', function (Blueprint $table) {
             $table->id();
+            // 外部キー
+            $table->unsignedBigInteger('treat_id');
+            // カラム
+            $table->string('location');
+
             $table->timestamps();
         });
     }

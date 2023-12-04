@@ -13,6 +13,17 @@ return new class extends Migration
     {
         Schema::create('treats', function (Blueprint $table) {
             $table->id();
+            // 上三つは外部キー
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('location_id');
+            $table->unsignedBigInteger('shelflife_id');
+            // ここから下はカラム
+            $table->string('image');
+            $table->string('name');
+            $table->date('made_date');
+            $table->date('pickup_deadline');
+            $table->string('url');
+
             $table->timestamps();
         });
     }
