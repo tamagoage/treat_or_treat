@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('guest_users', function (Blueprint $table) {
             $table->id();
+            // 上二つは外部キー
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('treat_id');
+            // ここから下はカラム
+            $table->string('nickname');
+
             $table->timestamps();
         });
     }
