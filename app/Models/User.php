@@ -42,4 +42,19 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function treats()
+    {
+        return $this->hasMany(Treat::class);
+    }
+
+    public function guest_user()
+    {
+        return $this->hasOne(GuestUser::class);
+    }
+
+    public function treat_interest()
+    {
+        return $this->belongsTo(TreatInterest::class);
+    }
 }
