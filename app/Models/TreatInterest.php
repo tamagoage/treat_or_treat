@@ -14,4 +14,14 @@ class TreatInterest extends Model
         'treat_id',
         'is_rejected',
     ];
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
+
+    public function treat()
+    {
+        return $this->belongsTo(Treat::class);
+    }
 }
