@@ -25,9 +25,9 @@ class Treat extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function guest_user()
+    public function guest_users()
     {
-        return $this->belongsTo(GuestUser::class);
+        return $this->hasMany(GuestUser::class);
     }
 
     public function shelf_life()
