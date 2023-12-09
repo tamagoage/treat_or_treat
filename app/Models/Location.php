@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Location extends Model
 {
     use HasFactory;
+
+    protected $fileable = [
+        'treat_id',
+        'location',
+    ];
 }
