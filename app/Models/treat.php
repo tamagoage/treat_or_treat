@@ -19,4 +19,29 @@ class treat extends Model
         'pickup_deadline',
         'url',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function guest_user()
+    {
+        return $this->belongsTo(GuestUser::class);
+    }
+
+    public function shelf_life()
+    {
+        return $this->hasOne(ShelfLife::class);
+    }
+
+    public function location()
+    {
+        return $this->hasOne(Location::class);
+    }
+
+    public function treat_interests()
+    {
+        return $this->hasMany(TreatInterest::class);
+    }
 }
