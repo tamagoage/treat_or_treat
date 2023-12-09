@@ -13,4 +13,9 @@ class Location extends Model
         'treat_id',
         'location',
     ];
+
+    public function treat()
+    {
+        return $this->belongsTo(Treat::class);
+    }
 }

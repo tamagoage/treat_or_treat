@@ -14,4 +14,14 @@ class GuestUser extends Model
         'treat_id',
         'nickname',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function treat()
+    {
+        return $this->belongsTo(Treat::class);
+    }
 }

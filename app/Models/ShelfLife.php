@@ -14,4 +14,9 @@ class ShelfLife extends Model
         'shelf_life',
         'shelf_life_status'
     ];
+
+    public function treat()
+    {
+        return $this->belongsTo(Treat::class);
+    }
 }
