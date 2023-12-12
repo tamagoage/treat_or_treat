@@ -16,6 +16,9 @@ export default {
                 sans: ["Figtree", ...defaultTheme.fontFamily.sans],
             },
         },
+        daisyui: {
+            themes: ["cupcake"],
+        },
     },
 
     plugins: [forms, daisyui],

@@ -28,4 +28,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+// testにアクセスしたら、resources/views/test.blade.phpを表示する
+Route::get('/test', function () {
+    return view('test');
+});
+
+require __DIR__ . '/auth.php';
