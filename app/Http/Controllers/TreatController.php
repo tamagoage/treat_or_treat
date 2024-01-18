@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\treat;
+use App\Models\Treat;
 use App\Http\Requests\StoretreatRequest;
 use App\Http\Requests\UpdatetreatRequest;
+use Illuminate\Support\Facades\Auth;
 
 class TreatController extends Controller
 {
@@ -13,7 +14,9 @@ class TreatController extends Controller
      */
     public function index()
     {
-        //
+        $myTreats = Treat::where('user_id', Auth::id())->get();
+        $othersTreats = Treat::where('user_id', '!=', Auth::id())->get();
+        return view('treats.index', compact('myTreats', 'othersTreats'));
     }
 
     /**
