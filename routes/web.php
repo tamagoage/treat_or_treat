@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TreatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// 以下三つのRouteは、LaravelのデフォルトのRoute
 Route::get('/', function () {
     return view('welcome');
 });
@@ -32,5 +34,8 @@ Route::middleware('auth')->group(function () {
 Route::get('/test', function () {
     return view('test');
 });
+
+// treatsにアクセス時の処理
+Route::get('/treats', [TreatController::class, 'index'])->middleware('auth');
 
 require __DIR__ . '/auth.php';
