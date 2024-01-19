@@ -32,7 +32,7 @@ class TreatController extends Controller
      */
     public function store(StoretreatRequest $request)
     {
-        //
+        var_dump($request->all());
     }
 
     /**

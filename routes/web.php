@@ -38,7 +38,10 @@ Route::get('/test', function () {
 // treatsにアクセス時の処理
 Route::get('/treats', [TreatController::class, 'index'])->middleware('auth');
 
-// treats/createにアクセス時、treats/create.blade.phpを表示する
+// treats/createにアクセス時の処理
 Route::get('/treats/create', [TreatController::class, 'create'])->name('treats.create')->middleware('auth');
+
+// treatsにPOSTリクエストが来た時の処理
+Route::post('/treats.create', [TreatController::class, 'store'])->name('treats.store')->middleware('auth');
 
 require __DIR__ . '/auth.php';
