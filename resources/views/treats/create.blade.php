@@ -15,31 +15,24 @@
         'pickup_deadline'をフォームに入力 -->
 
     <div class="container">
-        <form action="{{ route('treats.store') }}" method="POST">
+        <form action="{{ route('treats.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
                 <label for="location_id">Location</label>
                 <select class="form-control" id="location_id" name="location_id">
-                    <option value="1">Tokyo</option>
-                    <option value="2">Osaka</option>
-                    <option value="3">Fukuoka</option>
+                    <!-- セレクトと自由記述を共存させたい -->
+                    <option value="1">自宅</option>
+                    <option value="2">学校</option>
+                    <option value="3">駅</option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="shelf_life_id">Shelf Life</label>
-                <select class="form-control" id="shelf_life_id" name="shelf_life_id">
-                    <option value="1">1 day</option>
-                    <option value="2">2 days</option>
-                    <option value="3">3 days</option>
-                    <option value="4">4 days</option>
-                    <option value="5">5 days</option>
-                    <option value="6">6 days</option>
-                    <option value="7">7 days</option>
-                </select>
+                <input class="form-control" id="shelf_life_id" name="shelf_life_id" type="date">
             </div>
             <div class="form-group">
                 <label for="image">Image</label>
-                <input class="form-control" id="image" name="image" type="text">
+                <input class="form-control" id="image" name="image" type="file">
             </div>
             <div class="form-group">
                 <label for="name">Name</label>
