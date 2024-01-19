@@ -24,7 +24,7 @@ class TreatController extends Controller
      */
     public function create()
     {
-        //
+        return view('treats.create');
     }
 
     /**
