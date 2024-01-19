@@ -30,9 +30,20 @@ class TreatController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoretreatRequest $request)
+    public function store(StoreTreatRequest $request)
     {
-        var_dump($request->all());
+        $date = $request->all();
+        $data['image'] = "後でs3に保存するように変更する";
+
+        $treat = Treat::create([
+            'location_id' => $date['location_id'],
+            'shelf_life_id' => $date['shelf_life_id'],
+            'image' => $date['image'],
+            'name' => $date['name'],
+            'made_date' => $date['made_date'],
+            'pickup_deadline' => $date['pickup_deadline'],
+            'user_id' => Auth::id(),
+        ]);
     }
 
     /**
