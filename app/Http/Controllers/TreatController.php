@@ -75,7 +75,19 @@ class TreatController extends Controller
         // treatのidに紐づくtreat_interestを取得
         $treatInterest = TreatInterest::query()->where('treat_id', '=', $treat->id)->first();
         $guestUser = GuestUser::query()->where('treat_id', '=', $treat->id)->first();
-        return view('treats.show', compact('treat', 'treatInterest', 'guestUser'));
+
+        $user = Auth::user();
+
+        if ($user === $treat->user_id) {
+            // 投稿した本人の場合
+            return view('treats.show', compact('treat', 'treatInterest', 'guestUser'));
+        } else if ($user === null) {
+            // ゲストユーザーの場合
+            return view('treats.show', compact('treat', 'user'));
+        } else {
+            // 投稿した本人ではない場合
+            return view('treats.show', compact('treat'));
+        }
     }
 
     /**
