@@ -12,6 +12,7 @@ class GuestUser extends Model
     protected $fillable = [
         'user_id',
         'treat_id',
+        'session_id',
         'nickname',
     ];
 

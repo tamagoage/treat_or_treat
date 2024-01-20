@@ -10,8 +10,8 @@ class ShelfLife extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'treat_id',
-        'shelf_life',
         'shelf_life_status'
     ];
 
