@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            // おそらくuserからnicknameに変更したマイグレーションファイルは削除済み
-            // そのため、ロールバックできなかったのでコメントアウト
-            // $table->renameColumn('nickname', 'name');
+        Schema::table('treat_interests', function (Blueprint $table) {
+            // 型と名前を変更
+            $table->string('is_rejected')->default('pending')->change();
+            $table->renameColumn('is_rejected', 'status');
         });
     }
 
@@ -23,7 +23,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('treat_interests', function (Blueprint $table) {
             //
         });
     }
