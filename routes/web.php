@@ -44,4 +44,7 @@ Route::get('/treats/create', [TreatController::class, 'create'])->name('treats.c
 // treatsにPOSTリクエストが来た時の処理
 Route::post('/treats.create', [TreatController::class, 'store'])->name('treats.store')->middleware('auth');
 
+// treats/{treat}にアクセス時の処理
+Route::get('/treats/{treat}', [TreatController::class, 'show'])->name('treats.show')->middleware('auth');
+
 require __DIR__ . '/auth.php';

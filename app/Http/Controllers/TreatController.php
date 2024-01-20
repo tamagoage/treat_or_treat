@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Treat;
 use App\Models\ShelfLife;
 use App\Models\Location;
+use App\Models\TreatInterest;
+use App\Models\GuestUser;
 use App\Http\Requests\StoreTreatRequest;
 use App\Http\Requests\UpdateTreatRequest;
 use Illuminate\Support\Facades\Auth;
@@ -68,7 +70,12 @@ class TreatController extends Controller
      */
     public function show(Treat $treat)
     {
-        //
+        // 選択されたtreatのidと同じものを取得
+        $treat = Treat::query()->where('id', '=', $treat->id)->first();
+        // treatのidに紐づくtreat_interestを取得
+        $treatInterest = TreatInterest::query()->where('treat_id', '=', $treat->id)->first();
+        $guestUser = GuestUser::query()->where('treat_id', '=', $treat->id)->first();
+        return view('treats.show', compact('treat', 'treatInterest', 'guestUser'));
     }
 
     /**

@@ -20,19 +20,22 @@
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="myTreats" role="tabpanel">
                 @foreach($myTreats as $treat)
-                <p>{{ $treat->name }}</p>
-                <p>{{ $treat->description }}</p>
+                <a href="{{ route('treats.show', $treat->id) }}">
+                    <p>{{ $treat->name }}</p>
+                    <p>{{ $treat->description }}</p>
+                </a>
                 @endforeach
             </div>
             <div class="tab-pane fade" id="othersTreats" role="tabpanel">
                 @foreach($othersTreats as $treat)
-                <p>{{ $treat->name }}</p>
-                <p>{{ $treat->description }}</p>
+                <a href="{{ route('treats.show', $treat->id) }}">
+                    <p>{{ $treat->name }}</p>
+                    <p>{{ $treat->description }}</p>
+                </a>
                 @endforeach
             </div>
         </div>
         <a href="{{ route('treats.create') }}" class="btn btn-primary">Create</a>
-        @dd($a = auth()->user()->attributesToArray());
     </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
