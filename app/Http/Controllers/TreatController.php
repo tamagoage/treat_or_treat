@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Treat;
+use App\Models\ShelfLife;
+use App\Models\Location;
 use App\Http\Requests\StoretreatRequest;
 use App\Http\Requests\UpdatetreatRequest;
 use Illuminate\Support\Facades\Auth;
@@ -48,7 +50,17 @@ class TreatController extends Controller
             'user_id' => auth()->user()->id,
         ]);
 
-        // ShelfLifeやLocationにも挿入する
+        // // その他から追加されたときShelfLifeやLocationにも挿入する
+        // $shelfLife = ShelfLife::create([
+        //     'treat_id' => $treat->id,
+        //     'shelf_life' => $date['shelf_life_id'],
+        //     'shelf_life_status' => 1,
+        // ]);
+
+        // $location = Location::create([
+        //     'treat_id' => $treat->id,
+        //     'location' => $date['location_id'],
+        // ]);
     }
 
     /**
