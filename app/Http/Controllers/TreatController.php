@@ -6,6 +6,7 @@ use App\Models\Treat;
 use App\Http\Requests\StoretreatRequest;
 use App\Http\Requests\UpdatetreatRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class TreatController extends Controller
 {
@@ -34,6 +35,7 @@ class TreatController extends Controller
     {
         $date = $request->all();
         $data['image'] = "後でs3に保存するように変更する";
+        $data['url'] = Str::uuid();
 
         $treat = Treat::create([
             'location_id' => $date['location_id'],
@@ -42,8 +44,11 @@ class TreatController extends Controller
             'name' => $date['name'],
             'made_date' => $date['made_date'],
             'pickup_deadline' => $date['pickup_deadline'],
-            'user_id' => Auth::id(),
+            'url' => $data['url'],
+            'user_id' => auth()->user()->id,
         ]);
+
+        // ShelfLifeやLocationにも挿入する
     }
 
     /**

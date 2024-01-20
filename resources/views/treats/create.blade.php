@@ -28,7 +28,15 @@
             </div>
             <div class="form-group">
                 <label for="shelf_life_id">Shelf Life</label>
-                <input class="form-control" id="shelf_life_id" name="shelf_life_id" type="date">
+                <select class="form-control" id="shelf_life_id" name="shelf_life_id">
+                    <option value="1">1日</option>
+                    <option value="2">2日</option>
+                    <option value="3">3日</option>
+                    <option value="4">4日</option>
+                    <option value="5">5日</option>
+                    <option value="6">6日</option>
+                    <option value="7">7日</option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="image">Image</label>
@@ -48,6 +56,15 @@
             </div>
             <button class="btn btn-primary" type="submit">Submit</button>
         </form>
+        @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
 </body>
 
 </html>

@@ -24,7 +24,7 @@ class StoreTreatRequest extends FormRequest
         return [
             'location_id' => 'required|integer',
             'shelf_life_id' => 'required|integer',
-            'image' => 'required|file|image|mimes:jpeg,png,jpg,gif|max:2048',
+            // 'image' => 'required|file|image|mimes:jpeg,png,jpg,gif|max:2048',
             'name' => 'required|string|max:255',
             // 今日以前
             'made_date' => 'required|date|before_or_equal:today',
