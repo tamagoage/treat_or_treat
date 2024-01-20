@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Treat;
 use App\Models\ShelfLife;
 use App\Models\Location;
-use App\Http\Requests\StoretreatRequest;
-use App\Http\Requests\UpdatetreatRequest;
+use App\Http\Requests\StoreTreatRequest;
+use App\Http\Requests\UpdateTreatRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -66,7 +66,7 @@ class TreatController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(treat $treat)
+    public function show(Treat $treat)
     {
         //
     }
@@ -74,7 +74,7 @@ class TreatController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(treat $treat)
+    public function edit(Treat $treat)
     {
         //
     }
@@ -82,7 +82,7 @@ class TreatController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatetreatRequest $request, treat $treat)
+    public function update(UpdateTreatRequest $request, Treat $treat)
     {
         //
     }
