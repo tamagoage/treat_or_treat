@@ -12,7 +12,7 @@ class TreatInterest extends Model
     protected $fillable = [
         'user_id',
         'treat_id',
-        'is_rejected',
+        'status',
     ];
 
     public function users()
