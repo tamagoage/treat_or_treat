@@ -1,3 +1,2 @@
 <?php
-var_dump($sesssssssion = session()->getId());
-dd($treat);
+dd($test, $user->id, $treat->user_id);
