@@ -21,5 +21,7 @@ export default {
         },
     },
 
-    plugins: [forms, daisyui],
+    // formコンポーネントとdaisyuiは相性が悪い
+    // plugins: [forms, daisyui],
+    plugins: [daisyui],
 };
