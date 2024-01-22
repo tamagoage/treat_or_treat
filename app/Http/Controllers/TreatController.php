@@ -73,33 +73,21 @@ class TreatController extends Controller
         // 選択されたtreatのidと同じものを取得
         $treat = Treat::query()->where('id', '=', $treat->id)->first();
         // treatのidに紐づくtreat_interestを取得
-        $treatInterest = TreatInterest::query()->where('treat_id', '=', 1)->first();
-        $guestUser = GuestUser::query()->where('treat_id', '=', $treat->id)->first();
+        $treatInterests = TreatInterest::query()->where('treat_id', '=', 1)->get();
+        $guestUsers = GuestUser::query()->where('treat_id', '=', $treat->id)->get();
 
         $user = Auth::user();
-        // if文がうまく機能していない
-        // if ($user === $treat->user_id) {
-        //     // 投稿した本人の場合
-        //     return view('treats.show', compact('treat', 'treatInterest', 'guestUser'));
-        // } else if ($user === null) {
-        //     // ゲストユーザーの場合
-        //     return view('treats.show', compact('treat', 'user'));
-        // } else {
-        //     // 投稿した本人ではない場合
-        //     return view('treats.show', compact('treat'));
-        // }
+
         if ($user && $user->id === $treat->user_id) {
             // 投稿した本人の場合
-            $test = '本人';
-            return view('treats.show', compact('test', 'user', 'treat'));
-        } else if (!$user) {
-            // ゲストユーザーの場合
-            $test = 'ゲストユーザー';
-            return view('treats.show', compact('test', 'user', 'treat'));
+            return view('treats.show', compact('treat', 'treatInterests', 'guestUsers'));
+            // } else if (!$user) {
+            //     // ゲストユーザーの場合
+            //     // 不要？ゲストユーザーがsession_idを登録するボタンはviewで制御すればよい？
+            //     return view('treats.show', compact('treat', 'user'));
         } else {
             // 投稿した本人ではない場合
-            $test = 'その他';
-            return view('treats.show', compact('test', 'user', 'treat'));
+            return view('treats.show', compact('treat'));
         }
     }
 
