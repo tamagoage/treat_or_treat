@@ -1,12 +1,12 @@
 <?php
 if (isset($treat)) {
-    dump($treat);
+    dump($treat->toArray());
 }
 if (isset($treatInterests)) {
-    dump($treatInterests);
+    dump($treatInterests->toArray());
 }
 if (isset($guestUsers)) {
-    dump($guestUsers);
+    dump($guestUsers->toArray());
 }
 ?>
 
@@ -32,41 +32,68 @@ if (isset($guestUsers)) {
         </div>
         @endif
 
-        <!-- $guestUsersをforeachで出力 -->
-        @if(isset($guestUsers))
-        @foreach($guestUsers as $guestUser)
-        <div class="card mb-3">
-            <div class="card-body">
-                <h5 class="card-title">{{ $guestUser->session_id }}</h5>
-                <p class="card-text">{{ $guestUser->nickname }}</p>
-                <div class="form-control">
+        <form method="POST" action="{{ route('updateStatus') }}">
+            <!-- $guestUsersをforeachで出力 -->
+            @if(isset($guestUsers))
+            @foreach($guestUsers as $guestUser)
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">{{ $guestUser->session_id }}</h5>
+                    <p class="card-text">{{ $guestUser->nickname }}</p>
                     <label class="label cursor-pointer">
-                        <span class="label-text">Remember me</span>
-                        <input type="checkbox" class="toggle" />
+                        <input type="checkbox" class="toggle" name="guestUser[{{ $guestUser->session_id }}]" />
+                    </label>
+                    <label class="label cursor-pointer">
+                        <span class="label-text">保留する</span>
+                        <input type="checkbox" class="checkbox pendingStatus" id="guestUser[{{ $guestUser->session_id }}]" />
                     </label>
                 </div>
             </div>
-        </div>
-        @endforeach
-        @endif
+            @endforeach
+            @endif
 
-        <!-- $treatInterestをforeachで出力 -->
-        @if(isset($treatInterests))
-        @foreach($treatInterests as $interest)
-        <div class="card mb-3">
-            <div class="card-body">
-                <h5 class="card-title">{{ $interest->user_id }}</h5>
-                <p class="card-text">{{ $interest->status }}</p>
+            <!-- $treatInterestをforeachで出力 -->
+            @if(isset($treatInterests))
+            @foreach($treatInterests as $interest)
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">{{ $interest->user_id }}</h5>
+                    <p class="card-text">{{ $interest->status }}</p>
+                    <label class="label cursor-pointer">
+                        <span class="label-text">Remember me</span>
+                        <input type="checkbox" class="toggle" name="treatInterest[{{ $interest->user_id }}]" />
+                    </label>
+                    <label class="label cursor-pointer">
+                        <span class="label-text">保留する</span>
+                        <input type="checkbox" class="checkbox pendingStatus" id="treatInterest[{{ $interest->user_id }}]" />
+                    </label>
+                </div>
             </div>
-            <div class="form-control">
-                <label class="label cursor-pointer">
-                    <span class="label-text">Remember me</span>
-                    <input type="checkbox" class="toggle" />
-                </label>
-            </div>
-        </div>
-        @endforeach
-        @endif
+            @endforeach
+            @endif
+            <button type="submit" class="btn">送信</button>
+        </form>
     </div>
-    <!-- 以下、既存のコード -->
+    <!-- layout確認 -->
+    <input type="checkbox" class="toggle" />
+    <input type="checkbox" checked="checked" class="checkbox" />
+
+    <script>
+        const pendingStatus = document.querySelectorAll('.pendingStatus');
+        const pendingStatusName = Array.from(pendingStatus).map((element) => {
+            return element.name;
+        });
+
+        // チェックボックスがcheckedのとき、toggleをdisabledにする
+        pendingStatus.forEach((element) => {
+            element.addEventListener('change', () => {
+                const toggle = document.querySelector(`input[name="${element.id}"]`);
+                if (element.checked) {
+                    toggle.disabled = true;
+                } else {
+                    toggle.disabled = false;
+                }
+            });
+        });
+    </script>
 </body>
