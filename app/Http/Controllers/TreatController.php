@@ -11,6 +11,7 @@ use App\Http\Requests\StoreTreatRequest;
 use App\Http\Requests\UpdateTreatRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 
 class TreatController extends Controller
 {
@@ -72,7 +73,7 @@ class TreatController extends Controller
     {
         // 選択されたtreatのidと同じものを取得
         $treat = Treat::query()->where('id', '=', $treat->id)->first();
-        // treatのidに紐づくtreat_interestを取得
+        // treatのidに紐づくtreat_interest,guest_userを取得
         $treatInterests = TreatInterest::query()->where('treat_id', '=', 1)->get();
         $guestUsers = GuestUser::query()->where('treat_id', '=', $treat->id)->get();
 
@@ -113,5 +114,33 @@ class TreatController extends Controller
     public function destroy(treat $treat)
     {
         //
+    }
+
+    public function updateApprovalStatus(Request $request)
+    {
+        $requestDate = $request->all();
+        dump($requestDate);
+
+        foreach (GuestUser::all() as $guestUser) {
+            $sessionIdOfModel = $guestUser->session_id;
+            $status = isset($requestDate['guestUser'][$sessionIdOfModel]) ? 'approve' : 'reject';
+            if (isset($requestDate['guestUserPendingStatus'][$sessionIdOfModel])) {
+                $status = 'pending';
+            }
+            $guestUser->update([
+                'status' => $status,
+            ]);
+        }
+
+        foreach (TreatInterest::all() as $treatInterest) {
+            $userIdOfModel = $treatInterest->user_id;
+            $status = isset($requestDate['treatInterest'][$userIdOfModel]) ? 'approve' : 'reject';
+            if (isset($requestDate['treatInterestPendingStatus'][$userIdOfModel])) {
+                $status = 'pending';
+            }
+            $treatInterest->update([
+                'status' => $status,
+            ]);
+        }
     }
 }

@@ -32,7 +32,8 @@ if (isset($guestUsers)) {
         </div>
         @endif
 
-        <form method="POST" action="{{ route('updateStatus') }}">
+        <form method="POST" action="{{ route('updateApprovalStatus', ['treat' => $treat->id]) }}">
+            @csrf
             <!-- $guestUsersをforeachで出力 -->
             @if(isset($guestUsers))
             @foreach($guestUsers as $guestUser)
@@ -45,7 +46,7 @@ if (isset($guestUsers)) {
                     </label>
                     <label class="label cursor-pointer">
                         <span class="label-text">保留する</span>
-                        <input type="checkbox" class="checkbox pendingStatus" id="guestUser[{{ $guestUser->session_id }}]" />
+                        <input type="checkbox" class="checkbox pendingStatus" id="guestUser[{{ $guestUser->session_id }}]" name="guestUserPendingStatus[{{ $guestUser->session_id }}]" />
                     </label>
                 </div>
             </div>
@@ -65,7 +66,7 @@ if (isset($guestUsers)) {
                     </label>
                     <label class="label cursor-pointer">
                         <span class="label-text">保留する</span>
-                        <input type="checkbox" class="checkbox pendingStatus" id="treatInterest[{{ $interest->user_id }}]" />
+                        <input type="checkbox" class="checkbox pendingStatus" id="treatInterest[{{ $interest->user_id }}]" name="treatInterestPendingStatus[{{ $interest->user_id }}]" />
                     </label>
                 </div>
             </div>

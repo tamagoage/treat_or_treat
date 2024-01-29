@@ -47,4 +47,6 @@ Route::post('/treats.create', [TreatController::class, 'store'])->name('treats.s
 // treats/{treat}にアクセス時の処理
 Route::get('/treats/{treat}', [TreatController::class, 'show'])->name('treats.show');
 
+Route::post('/treats/{treat}', [TreatController::class, 'updateApprovalStatus'])->name('updateApprovalStatus');
+
 require __DIR__ . '/auth.php';

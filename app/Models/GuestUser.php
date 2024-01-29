@@ -14,6 +14,7 @@ class GuestUser extends Model
         'treat_id',
         'session_id',
         'nickname',
+        'status',
     ];
 
     public function user()
