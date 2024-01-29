@@ -74,7 +74,7 @@ class TreatController extends Controller
         // 選択されたtreatのidと同じものを取得
         $treat = Treat::query()->where('id', '=', $treat->id)->first();
         // treatのidに紐づくtreat_interest,guest_userを取得
-        $treatInterests = TreatInterest::query()->where('treat_id', '=', 1)->get();
+        $treatInterests = TreatInterest::query()->where('treat_id', '=', $treat->id)->get();
         $guestUsers = GuestUser::query()->where('treat_id', '=', $treat->id)->get();
 
         $user = Auth::user();
@@ -116,12 +116,13 @@ class TreatController extends Controller
         //
     }
 
-    public function updateApprovalStatus(Request $request)
+    public function updateApprovalStatus(Request $request, Treat $treat)
     {
         $requestDate = $request->all();
+        $treatId = $treat->id;
         dump($requestDate);
 
-        foreach (GuestUser::all() as $guestUser) {
+        foreach (GuestUser::where('treat_id', '=', $treatId)->get() as $guestUser) {
             $sessionIdOfModel = $guestUser->session_id;
             $status = isset($requestDate['guestUser'][$sessionIdOfModel]) ? 'approve' : 'reject';
             if (isset($requestDate['guestUserPendingStatus'][$sessionIdOfModel])) {
@@ -132,7 +133,7 @@ class TreatController extends Controller
             ]);
         }
 
-        foreach (TreatInterest::all() as $treatInterest) {
+        foreach (TreatInterest::where('treat_id', '=', $treatId)->get() as $treatInterest) {
             $userIdOfModel = $treatInterest->user_id;
             $status = isset($requestDate['treatInterest'][$userIdOfModel]) ? 'approve' : 'reject';
             if (isset($requestDate['treatInterestPendingStatus'][$userIdOfModel])) {
