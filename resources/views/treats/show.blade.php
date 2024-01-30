@@ -32,6 +32,25 @@ if (isset($guestUsers)) {
         </div>
         @endif
 
+        @if(isset($user) && $user === "interest")
+        <form action="POST" action="">
+            @csrf
+            <label class="label cursor-pointer">
+                <input type="checkbox" class="toggle" name="" />
+            </label>
+            <button type="submit" class="btn">送信</button>
+        </form>
+
+        @elseif(!isset($user))
+        <form action="POST" action="">
+            @csrf
+            <label class="label cursor-pointer">
+                <input type="checkbox" class="toggle" name="" />
+            </label>
+            <button type="submit" class="btn">送信</button>
+        </form>
+        @endif
+
         <form method="POST" action="{{ route('updateApprovalStatus', ['treat' => $treat->id]) }}">
             @csrf
             <!-- $guestUsersをforeachで出力 -->
@@ -39,8 +58,8 @@ if (isset($guestUsers)) {
             @foreach($guestUsers as $guestUser)
             <div class="card mb-3">
                 <div class="card-body">
-                    <h5 class="card-title">{{ $guestUser->session_id }}</h5>
-                    <p class="card-text">{{ $guestUser->nickname }}</p>
+                    <h5 class="card-title">{{ $guestUser->nickname }}</h5>
+                    <p class="card-text">{{ $guestUser->status }}</p>
                     <label class="label cursor-pointer">
                         <input type="checkbox" class="toggle" name="guestUser[{{ $guestUser->session_id }}]" />
                     </label>
@@ -72,7 +91,10 @@ if (isset($guestUsers)) {
             </div>
             @endforeach
             @endif
+
+            @if(isset($guestUsers) || isset($treatInterests))
             <button type="submit" class="btn">送信</button>
+            @endif
         </form>
     </div>
     <!-- layout確認 -->

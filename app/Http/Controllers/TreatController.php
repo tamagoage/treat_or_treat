@@ -81,14 +81,16 @@ class TreatController extends Controller
 
         if ($user && $user->id === $treat->user_id) {
             // 投稿した本人の場合
-            return view('treats.show', compact('treat', 'treatInterests', 'guestUsers'));
-            // } else if (!$user) {
-            //     // ゲストユーザーの場合
-            //     // 不要？ゲストユーザーがsession_idを登録するボタンはviewで制御すればよい？
-            //     return view('treats.show', compact('treat', 'user'));
+            $user = "author";
+            return view('treats.show', compact('user', 'treat', 'treatInterests', 'guestUsers'));
+        } else if (!$user) {
+            // ゲストユーザーの場合
+            // 不要？ゲストユーザーがsession_idを登録するボタンはviewで制御すればよい？
+            return view('treats.show', compact('treat', 'user'));
         } else {
             // 投稿した本人ではない場合
-            return view('treats.show', compact('treat'));
+            $user = "interest";
+            return view('treats.show', compact('user', 'treat'));
         }
     }
 
