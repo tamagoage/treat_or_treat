@@ -78,6 +78,8 @@ class TreatController extends Controller
         $guestUsers = GuestUser::query()->where('treat_id', '=', $treat->id)->get();
 
         $user = Auth::user();
+        $currentUserSessionId = session()->getId();
+        $guestUserExists = GuestUser::query()->where('session_id', '=', $currentUserSessionId)->exists();
 
         if ($user && $user->id === $treat->user_id) {
             // 投稿した本人の場合
@@ -86,7 +88,7 @@ class TreatController extends Controller
         } else if (!$user) {
             // ゲストユーザーの場合
             // 不要？ゲストユーザーがsession_idを登録するボタンはviewで制御すればよい？
-            return view('treats.show', compact('treat', 'user'));
+            return view('treats.show', compact('treat', 'user', 'guestUserExists'));
         } else {
             // 投稿した本人ではない場合
             $user = "interest";

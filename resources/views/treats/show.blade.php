@@ -33,6 +33,7 @@ if (isset($guestUsers)) {
         @endif
 
         @if(isset($user) && $user === "interest")
+        <!-- ログイン済みユーザー -->
         <form action="POST" action="">
             @csrf
             <label class="label cursor-pointer">
@@ -40,8 +41,10 @@ if (isset($guestUsers)) {
             </label>
             <button type="submit" class="btn">送信</button>
         </form>
+        {{ session()->getId() }}
 
         @elseif(!isset($user))
+        <!-- 未ログインユーザー -->
         <form action="POST" action="">
             @csrf
             <label class="label cursor-pointer">
@@ -49,6 +52,7 @@ if (isset($guestUsers)) {
             </label>
             <button type="submit" class="btn">送信</button>
         </form>
+        {{ session()->getId() }}
         @endif
 
         <form method="POST" action="{{ route('updateApprovalStatus', ['treat' => $treat->id]) }}">
