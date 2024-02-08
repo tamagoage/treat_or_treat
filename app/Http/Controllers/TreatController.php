@@ -79,7 +79,7 @@ class TreatController extends Controller
 
         $user = Auth::user();
         $currentUserSessionId = session()->getId();
-        $guestUserExists = GuestUser::query()->where('session_id', '=', $currentUserSessionId)->exists();
+        $guestUserExists = GuestUser::query()->whereIn('session_id', $guestUsers->pluck("session_id"))->exists();
 
         if ($user && $user->id === $treat->user_id) {
             // 投稿した本人の場合
