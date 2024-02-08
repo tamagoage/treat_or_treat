@@ -11,7 +11,7 @@ class StoreGuestUserRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,10 @@ class StoreGuestUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'treat_id' => 'required|integer',
+            'session_id' => 'required|string|max:255',
+            'nickname' => 'required|string|max:255',
+            'status' => 'required',
         ];
     }
 }
