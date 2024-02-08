@@ -15,7 +15,7 @@ if (isset($guestUsers)) {
 
 <head>
     <!-- その他のメタタグやスタイルシートのリンクなど -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -24,7 +24,7 @@ if (isset($guestUsers)) {
     <div class="container">
         <!-- $treatの情報をカードで出力 -->
         @if(isset($treat))
-        <div class="card mb-3">
+        <div class="card w-96 bg-base-100 shadow-xl">
             <div class="card-body">
                 <h5 class="card-title">{{ $treat->name }}</h5>
                 <p class="card-text">{{ $treat->url }}</p>
@@ -47,12 +47,23 @@ if (isset($guestUsers)) {
         <!-- 未ログインユーザー -->
         <form action="POST" action="">
             @csrf
+            @if(!$guestUserExists)
+            <!-- モーダルの中身 -->
+            <input type="checkbox" id="my_modal_7" class="modal-toggle" />
+            <div class="modal" role="dialog">
+                <div class="modal-box">
+                    <h3 class="text-lg font-bold">Hello!</h3>
+                    <input type="text" placeholder="Type here" id="nickname" class="input input-bordered w-full max-w-xs" />
+                </div>
+                <label class="modal-backdrop" for="my_modal_7">Close</label>
+            </div>
+            <!-- ここまで中身 -->
+            @endif
             <label class="label cursor-pointer">
                 <input type="checkbox" class="toggle" name="" />
             </label>
-            <button type="submit" class="btn">送信</button>
+            <button id="guestApplyBtn" type="submit" class="btn">送信</button>
         </form>
-        {{ session()->getId() }}
         @endif
 
         <form method="POST" action="{{ route('updateApprovalStatus', ['treat' => $treat->id]) }}">
@@ -60,7 +71,7 @@ if (isset($guestUsers)) {
             <!-- $guestUsersをforeachで出力 -->
             @if(isset($guestUsers))
             @foreach($guestUsers as $guestUser)
-            <div class="card mb-3">
+            <div class="card w-96 bg-base-100 shadow-xl mt-5">
                 <div class="card-body">
                     <h5 class="card-title">{{ $guestUser->nickname }}</h5>
                     <p class="card-text">{{ $guestUser->status }}</p>
@@ -79,7 +90,7 @@ if (isset($guestUsers)) {
             <!-- $treatInterestをforeachで出力 -->
             @if(isset($treatInterests))
             @foreach($treatInterests as $interest)
-            <div class="card mb-3">
+            <div class="card w-96 bg-base-100 shadow-xl mt-5">
                 <div class="card-body">
                     <h5 class="card-title">{{ $interest->user_id }}</h5>
                     <p class="card-text">{{ $interest->status }}</p>
@@ -101,9 +112,6 @@ if (isset($guestUsers)) {
             @endif
         </form>
     </div>
-    <!-- layout確認 -->
-    <input type="checkbox" class="toggle" />
-    <input type="checkbox" checked="checked" class="checkbox" />
 
     <script>
         const pendingStatus = document.querySelectorAll('.pendingStatus');
@@ -122,5 +130,38 @@ if (isset($guestUsers)) {
                 }
             });
         });
+
+
+        // session_idが未登録ユーザーの処理
+        @if(isset($guestUserExists) && !$guestUserExists)
+
+        let guestApplyBtn = document.getElementById('guestApplyBtn');
+        let openModalBtn;
+        let nickname = document.getElementById('nickname');
+
+        // ページの読み込み時にopenModalBtnに置き換え
+        if (nickname.value.trim() === '') {
+            guestApplyBtn.outerHTML = '<label id="openModalBtn" for="my_modal_7" class="btn">ニックネーム入力</label>';
+            openModalBtn = document.getElementById('openModalBtn');
+        }
+
+        // テキストエリアの入力に応じて置き換え
+        nickname.addEventListener('input', () => {
+            if (nickname.value.trim() !== '') {
+                if (openModalBtn) {
+                    openModalBtn.outerHTML = '<button id="guestApplyBtn" type="submit" class="btn">送信</button>';
+                    guestApplyBtn = document.getElementById('guestApplyBtn');
+                    openModalBtn = null;
+                }
+            } else {
+                if (guestApplyBtn) {
+                    guestApplyBtn.outerHTML = '<label id="openModalBtn" for="my_modal_7" class="btn">ニックネーム入力</label>';
+                    openModalBtn = document.getElementById('openModalBtn');
+                    guestApplyBtn = null;
+                }
+            }
+        });
+
+        @endif
     </script>
 </body>
