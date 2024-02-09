@@ -45,7 +45,7 @@ if (isset($guestUsers)) {
 
         @elseif(!isset($user))
         <!-- 未ログインユーザー -->
-        <form action="POST" action="">
+        <form method="POST" action="{{ route('guestUserStore', ['treat' => $treat->id]) }}">
             @csrf
             @if(!$guestUserExists)
             <!-- モーダルの中身 -->
