@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\GuestUser;
+use App\Models\Treat;
 use App\Http\Requests\StoreGuestUserRequest;
 use App\Http\Requests\UpdateGuestUserRequest;
 
@@ -27,9 +28,21 @@ class GuestUserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreGuestUserRequest $request)
+    public function store(StoreGuestUserRequest $request, Treat $treat)
     {
-        //
+        $data = $request->all();
+        dump($data);
+        $treat_id = $treat->id;
+        $sessionId = $request->session()->getId();
+
+        $guestUser = GuestUser::create([
+            'nickname' => $data['nickname'],
+            'session_id' => $sessionId,
+            'treat_id' => $treat_id,
+            'status' => 'approve',
+        ]);
+
+        return redirect()->back();
     }
 
     /**
