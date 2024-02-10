@@ -53,17 +53,27 @@ if (isset($guestUsers)) {
             <div class="modal" role="dialog">
                 <div class="modal-box">
                     <h3 class="text-lg font-bold">Hello!</h3>
-                    <input type="text" placeholder="Type here" id="nickname" class="input input-bordered w-full max-w-xs" />
+                    <input type="text" placeholder="Type here" name="nickname" id="nickname" class="input input-bordered w-full max-w-xs" />
                 </div>
                 <label class="modal-backdrop" for="my_modal_7">Close</label>
             </div>
             <!-- ここまで中身 -->
             @endif
             <label class="label cursor-pointer">
-                <input type="checkbox" class="toggle" name="" />
+                <input type="checkbox" class="toggle" name="approvalBtn" />
             </label>
             <button id="guestApplyBtn" type="submit" class="btn">送信</button>
         </form>
+
+        @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
         @endif
 
         <form method="POST" action="{{ route('updateApprovalStatus', ['treat' => $treat->id]) }}">
