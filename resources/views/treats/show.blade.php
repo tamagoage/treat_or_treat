@@ -45,9 +45,9 @@ if (isset($guestUsers)) {
 
         @elseif(!isset($user))
         <!-- 未ログインユーザー -->
+        @if(!$guestUserExists)
         <form method="POST" action="{{ route('guestUserStore', ['treat' => $treat->id]) }}">
             @csrf
-            @if(!$guestUserExists)
             <!-- モーダルの中身 -->
             <input type="checkbox" id="my_modal_7" class="modal-toggle" />
             <div class="modal" role="dialog">
@@ -58,12 +58,12 @@ if (isset($guestUsers)) {
                 <label class="modal-backdrop" for="my_modal_7">Close</label>
             </div>
             <!-- ここまで中身 -->
-            @endif
             <label class="label cursor-pointer">
                 <input type="checkbox" class="toggle" name="approvalBtn" />
             </label>
             <button id="guestApplyBtn" type="submit" class="btn">送信</button>
         </form>
+        @endif
 
         @if ($errors->any())
         <div class="alert alert-danger">
