@@ -3,7 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TreatController;
-use App\Models\GuestUser;
+use App\Http\Controllers\GuestUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,8 +48,8 @@ Route::post('/treats.create', [TreatController::class, 'store'])->name('treats.s
 // treats/{treat}にアクセス時の処理
 Route::get('/treats/{treat}', [TreatController::class, 'show'])->name('treats.show');
 
-Route::post('/treats/{treat}', [TreatController::class, 'updateApprovalStatus'])->name('updateApprovalStatus');
+Route::post('/treats/{treat}/approval-status', [TreatController::class, 'updateApprovalStatus'])->name('updateApprovalStatus');
 
-Route::post('/treats/{treat}', [GuestUserController::class, 'store']);
+Route::post('/treats/{treat}/create', [GuestUserController::class, 'store'])->name('guestUserStore');
 
 require __DIR__ . '/auth.php';
