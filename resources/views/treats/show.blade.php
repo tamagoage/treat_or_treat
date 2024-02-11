@@ -32,7 +32,7 @@ if (isset($guestUsers)) {
         </div>
         @endif
 
-        @if(isset($user) && $user === "interest")
+        @if(isset($userCategory) && $userCategory === "interest")
         <!-- ログイン済みユーザー -->
         <form action="POST" action="">
             @csrf
@@ -43,7 +43,7 @@ if (isset($guestUsers)) {
         </form>
         {{ session()->getId() }}
 
-        @elseif(!isset($user))
+        @elseif(!isset($userCategory))
         <!-- 未ログインユーザー -->
         @if(!$guestUserExists)
         <form method="POST" action="{{ route('guestUserStore', ['treat' => $treat->id]) }}">
