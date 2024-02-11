@@ -85,12 +85,6 @@ class TreatController extends Controller
         $user = Auth::user();
         $currentUserSessionId = session()->getId();
 
-        $guestUserSessionIds = $guestUsers->pluck('session_id');
-        $guestUserExists = $guestUserSessionIds->contains($currentUserSessionId);
-
-        $treatInterestUserIds = $treatInterests->pluck('user_id');
-        $treatInterestExists = $treatInterestUserIds->contains($user->id);
-
         if ($user && $user->id === $treat->user_id) {
             // 投稿した本人の場合
             $userCategory = "author";
@@ -98,10 +92,14 @@ class TreatController extends Controller
         } else if (!$user) {
             // ゲストユーザーの場合
             // $userCategory = "guest";も投げるべき
+            $guestUserSessionIds = $guestUsers->pluck('session_id');
+            $guestUserExists = $guestUserSessionIds->contains($currentUserSessionId);
             return view('treats.show', compact('treat',  'guestUserExists', 'guestUserStatus'));
         } else {
             // 投稿した本人ではない場合
             $userCategory = "interest";
+            $treatInterestUserIds = $treatInterests->pluck('user_id');
+            $treatInterestExists = $treatInterestUserIds->contains($user->id);
             dump($treatInterestExists);
             dump($userCategory);
             return view('treats.show', compact('userCategory', 'treat', 'treatInterestExists', 'treatInterestStatus'));
