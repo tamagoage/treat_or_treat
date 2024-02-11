@@ -77,11 +77,6 @@ class TreatController extends Controller
         $treatInterests = TreatInterest::query()->where('treat_id', '=', $treat->id)->get();
         $guestUsers = GuestUser::query()->where('treat_id', '=', $treat->id)->get();
 
-        // showApprovalStatusメソッドのロジックを移動させた
-        $treatInterestStatus = TreatInterest::query()->where('treat_id', '=', $treat->id)->pluck('status');
-        $guestUserStatus = GuestUser::query()->where('treat_id', '=', $treat->id)->pluck('status');
-        // ここまで
-
         $user = Auth::user();
         $currentUserSessionId = session()->getId();
 
@@ -92,14 +87,18 @@ class TreatController extends Controller
         } else if (!$user) {
             // ゲストユーザーの場合
             // $userCategory = "guest";も投げるべき
+            // 現在の閲覧者が既にguestUserに存在するかどうか
             $guestUserSessionIds = $guestUsers->pluck('session_id');
             $guestUserExists = $guestUserSessionIds->contains($currentUserSessionId);
+            $guestUserStatus = $guestUsers->where('session_id', $currentUserSessionId)->first();
             return view('treats.show', compact('treat',  'guestUserExists', 'guestUserStatus'));
         } else {
             // 投稿した本人ではない場合
             $userCategory = "interest";
+            // 現在の閲覧者が既にtreatInterestに存在するかどうか
             $treatInterestUserIds = $treatInterests->pluck('user_id');
             $treatInterestExists = $treatInterestUserIds->contains($user->id);
+            $treatInterestStatus = $treatInterests->where('user_id', $user->id)->first();
             dump($treatInterestExists);
             dump($userCategory);
             return view('treats.show', compact('userCategory', 'treat', 'treatInterestExists', 'treatInterestStatus'));
