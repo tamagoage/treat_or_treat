@@ -78,7 +78,6 @@ class TreatController extends Controller
         $guestUsers = GuestUser::query()->where('treat_id', '=', $treat->id)->get();
 
         $user = Auth::user();
-        $currentUserSessionId = session()->getId();
 
         if ($user && $user->id === $treat->user_id) {
             // 投稿した本人の場合
@@ -88,9 +87,13 @@ class TreatController extends Controller
             // ゲストユーザーの場合
             // $userCategory = "guest";も投げるべき
             // 現在の閲覧者が既にguestUserに存在するかどうか
+            $currentUserSessionId = session()->getId();
             $guestUserSessionIds = $guestUsers->pluck('session_id');
             $guestUserExists = $guestUserSessionIds->contains($currentUserSessionId);
-            $guestUserStatus = $guestUsers->where('session_id', $currentUserSessionId)->first();
+            if ($guestUserExists) {
+                $guestUserStatus = $guestUsers->where('session_id', $currentUserSessionId)->first();
+                dump($guestUserStatus);
+            }
             return view('treats.show', compact('treat',  'guestUserExists', 'guestUserStatus'));
         } else {
             // 投稿した本人ではない場合
@@ -98,7 +101,10 @@ class TreatController extends Controller
             // 現在の閲覧者が既にtreatInterestに存在するかどうか
             $treatInterestUserIds = $treatInterests->pluck('user_id');
             $treatInterestExists = $treatInterestUserIds->contains($user->id);
-            $treatInterestStatus = $treatInterests->where('user_id', $user->id)->first();
+            if ($treatInterestExists) {
+                $treatInterestStatus = $treatInterests->where('user_id', $user->id)->first();
+                dump($treatInterestStatus);
+            }
             dump($treatInterestExists);
             dump($userCategory);
             return view('treats.show', compact('userCategory', 'treat', 'treatInterestExists', 'treatInterestStatus'));
