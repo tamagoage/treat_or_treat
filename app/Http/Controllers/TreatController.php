@@ -77,10 +77,19 @@ class TreatController extends Controller
         $treatInterests = TreatInterest::query()->where('treat_id', '=', $treat->id)->get();
         $guestUsers = GuestUser::query()->where('treat_id', '=', $treat->id)->get();
 
+        // showApprovalStatusメソッドのロジックを移動させた
+        $treatInterestStatus = TreatInterest::query()->where('treat_id', '=', $treat->id)->pluck('status');
+        $guestUserStatus = GuestUser::query()->where('treat_id', '=', $treat->id)->pluck('status');
+        // ここまで
+
         $user = Auth::user();
         $currentUserSessionId = session()->getId();
+
         $guestUserSessionIds = $guestUsers->pluck('session_id');
         $guestUserExists = $guestUserSessionIds->contains($currentUserSessionId);
+
+        $treatInterestUserIds = $treatInterests->pluck('user_id');
+        $treatInterestExists = $treatInterestUserIds->contains($user->id);
 
         if ($user && $user->id === $treat->user_id) {
             // 投稿した本人の場合
@@ -89,11 +98,11 @@ class TreatController extends Controller
         } else if (!$user) {
             // ゲストユーザーの場合
             // 不要？ゲストユーザーがsession_idを登録するボタンはviewで制御すればよい？
-            return view('treats.show', compact('treat', 'user', 'guestUserExists'));
+            return view('treats.show', compact('user', 'treat',  'guestUserExists', 'guestUserStatus'));
         } else {
             // 投稿した本人ではない場合
             $user = "interest";
-            return view('treats.show', compact('user', 'treat'));
+            return view('treats.show', compact('user', 'treat', 'treatInterestExists', 'treatInterestStatus'));
         }
     }
 
