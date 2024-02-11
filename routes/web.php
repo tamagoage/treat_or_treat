@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TreatController;
 use App\Http\Controllers\GuestUserController;
+use App\Http\Controllers\TreatInterestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,5 +52,7 @@ Route::get('/treats/{treat}', [TreatController::class, 'show'])->name('treats.sh
 Route::post('/treats/{treat}/approval-status', [TreatController::class, 'updateApprovalStatus'])->name('updateApprovalStatus');
 
 Route::post('/treats/{treat}/create', [GuestUserController::class, 'store'])->name('guestUserStore');
+
+Route::post('/treats/{treat}/interest', [TreatInterestController::class, 'store'])->name('treatInterestStore');
 
 require __DIR__ . '/auth.php';

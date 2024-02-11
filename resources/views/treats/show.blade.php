@@ -33,18 +33,18 @@ if (isset($guestUsers)) {
         @endif
 
         @if(isset($userCategory) && $userCategory === "interest")
-        <!-- ログイン済みユーザー -->
-        <form action="POST" action="">
+        <!-- Interestに表示される画面 -->
+        <form method="POST" action="{{ route('treatInterestStore', ['treat' => $treat->id]) }}">
             @csrf
             <label class="label cursor-pointer">
-                <input type="checkbox" class="toggle" name="" />
+                <input type="checkbox" class="toggle" name="interestApprovalBtn" />
             </label>
             <button type="submit" class="btn">送信</button>
         </form>
-        {{ session()->getId() }}
+        <!-- Interest -->
 
         @elseif(!isset($userCategory))
-        <!-- 未ログインユーザー -->
+        <!-- 未ログインユーザーに表示される画面 -->
         @if(!$guestUserExists)
         <form method="POST" action="{{ route('guestUserStore', ['treat' => $treat->id]) }}">
             @csrf
@@ -64,6 +64,7 @@ if (isset($guestUsers)) {
             <button id="guestApplyBtn" type="submit" class="btn">送信</button>
         </form>
         @endif
+        <!-- 未ログインユーザー -->
 
         @if ($errors->any())
         <div class="alert alert-danger">

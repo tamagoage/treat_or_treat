@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\TreatInterest;
+use App\Models\Treat;
 use App\Http\Requests\StoreTreatInterestRequest;
 use App\Http\Requests\UpdateTreatInterestRequest;
+use Illuminate\Support\Facades\Auth;
+// use DragonCode\Contracts\Cashier\Auth\Auth;
 
 class TreatInterestController extends Controller
 {
@@ -27,9 +30,18 @@ class TreatInterestController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTreatInterestRequest $request)
+    public function store(StoreTreatInterestRequest $request, Treat $treat)
     {
-        //
+        $treatId = $treat->id;
+        $userId = Auth::user()->id;
+
+        $guestUser = TreatInterest::create([
+            'user_id' => $userId,
+            'treat_id' => $treatId,
+            'status' => 'pending',
+        ]);
+
+        return redirect()->back();
     }
 
     /**
