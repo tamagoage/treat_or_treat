@@ -107,6 +107,7 @@ class TreatController extends Controller
             } else {
                 $treatInterestStatus = null;
             }
+            dump($treatInterestExists);
             return view('treats.show', compact('userCategory', 'treat', 'treatInterestExists', 'treatInterestStatus'));
         }
     }

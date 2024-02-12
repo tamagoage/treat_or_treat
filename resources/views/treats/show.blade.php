@@ -34,6 +34,7 @@ if (isset($guestUsers)) {
 
         @if(isset($userCategory) && $userCategory === "interest")
         <!-- Interestに表示される画面 -->
+        @if(!$treatInterestExists)
         <form method="POST" action="{{ route('treatInterestStore', ['treat' => $treat->id]) }}">
             @csrf
             <label class="label cursor-pointer">
@@ -41,6 +42,7 @@ if (isset($guestUsers)) {
             </label>
             <button type="submit" class="btn">送信</button>
         </form>
+        @endif
         <!-- Interest -->
 
         @elseif(!isset($userCategory))
