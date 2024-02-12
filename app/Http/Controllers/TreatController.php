@@ -103,10 +103,9 @@ class TreatController extends Controller
             $treatInterestExists = $treatInterestUserIds->contains($user->id);
             if ($treatInterestExists) {
                 $treatInterestStatus = $treatInterests->where('user_id', $user->id)->first();
-                dump($treatInterestStatus);
+            } else {
+                $treatInterestStatus = null;
             }
-            dump($treatInterestExists);
-            dump($userCategory);
             return view('treats.show', compact('userCategory', 'treat', 'treatInterestExists', 'treatInterestStatus'));
         }
     }
