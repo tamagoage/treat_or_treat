@@ -42,6 +42,13 @@ if (isset($guestUsers)) {
             </label>
             <button type="submit" class="btn">送信</button>
         </form>
+        @else
+        <div class="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-md flex items-center space-x-4">
+            <div>
+                <div class="text-xl font-medium text-black">userId: {{ $treatInterestStatus->user_id }}</div>
+                <p class="text-gray-500">申請状況: {{ $treatInterestStatus->status }}</p>
+            </div>
+        </div>
         @endif
         <!-- Interest -->
 
@@ -65,6 +72,13 @@ if (isset($guestUsers)) {
             </label>
             <button id="guestApplyBtn" type="submit" class="btn">送信</button>
         </form>
+        @else
+        <div class="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-md flex items-center space-x-4">
+            <div>
+                <div class="text-xl font-medium text-black">ニックネーム: {{ $guestUserStatus->nickname }}</div>
+                <p class="text-gray-500">申請状況: {{ $guestUserStatus->status }}</p>
+            </div>
+        </div>
         @endif
         <!-- 未ログインユーザー -->
 
