@@ -92,7 +92,8 @@ class TreatController extends Controller
             $guestUserExists = $guestUserSessionIds->contains($currentUserSessionId);
             if ($guestUserExists) {
                 $guestUserStatus = $guestUsers->where('session_id', $currentUserSessionId)->first();
-                dump($guestUserStatus);
+            } else {
+                $guestUserStatus = null;
             }
             return view('treats.show', compact('treat',  'guestUserExists', 'guestUserStatus'));
         } else {
