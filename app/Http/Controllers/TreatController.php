@@ -12,6 +12,7 @@ use App\Http\Requests\UpdateTreatRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class TreatController extends Controller
 {
@@ -39,7 +40,13 @@ class TreatController extends Controller
     public function store(StoreTreatRequest $request)
     {
         $date = $request->all();
-        $data['image'] = "後でs3に保存するように変更する";
+        $image = $request->file('image');
+        try {
+            $path = $image->store('treats/', 's3');
+        } catch (\Exception $e) {
+            // 例外が発生した場合、そのメッセージをddで表示します
+            dd($e->getMessage());
+        }
         $data['url'] = Str::uuid();
 
         $treat = Treat::create([
@@ -52,6 +59,8 @@ class TreatController extends Controller
             'url' => $data['url'],
             'user_id' => auth()->user()->id,
         ]);
+
+        return redirect()->back();
 
         // // その他から追加されたときShelfLifeやLocationにも挿入する
         // $shelfLife = ShelfLife::create([
