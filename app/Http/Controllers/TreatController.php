@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Treat;
-use App\Models\ShelfLife;
-use App\Models\Location;
 use App\Models\TreatInterest;
 use App\Models\GuestUser;
 use App\Http\Requests\StoreTreatRequest;
@@ -42,7 +40,7 @@ class TreatController extends Controller
         $date = $request->all();
         $image = $request->file('image');
         try {
-            $path = $image->store('treats/', 's3');
+            $filePath = Storage::disk('s3')->putFile('treats', $image);
         } catch (\Exception $e) {
             // 例外が発生した場合、そのメッセージをddで表示します
             dd($e->getMessage());
@@ -52,7 +50,7 @@ class TreatController extends Controller
         $treat = Treat::create([
             'location_id' => $date['location_id'],
             'shelf_life_id' => $date['shelf_life_id'],
-            'image' => $date['image'],
+            'image' => $filePath,
             'name' => $date['name'],
             'made_date' => $date['made_date'],
             'pickup_deadline' => $date['pickup_deadline'],
