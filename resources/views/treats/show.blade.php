@@ -28,6 +28,8 @@ if (isset($guestUsers)) {
             <div class="card-body">
                 <h5 class="card-title">{{ $treat->name }}</h5>
                 <p class="card-text">{{ $treat->url }}</p>
+                <!-- 画像を表示 -->
+                <img src="{{ $treat->image }}" class="w-full h-auto rounded">
             </div>
         </div>
         @endif

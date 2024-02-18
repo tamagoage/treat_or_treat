@@ -40,7 +40,8 @@ class TreatController extends Controller
         $date = $request->all();
         $image = $request->file('image');
         try {
-            $filePath = Storage::disk('s3')->putFile('treats', $image);
+            $path = Storage::disk('s3')->putFile('treats', $image);
+            $filePath = Storage::disk('s3')->url($path);
         } catch (\Exception $e) {
             // 例外が発生した場合、そのメッセージをddで表示します
             dd($e->getMessage());
