@@ -19,7 +19,9 @@ class TreatController extends Controller
      */
     public function index()
     {
+        // 自分のtreatsと他人のtreats(要修正)を取得
         $myTreats = Treat::where('user_id', Auth::id())->get();
+        // 自分以外のすべてを取得しているため友達以外も含まれている
         $othersTreats = Treat::where('user_id', '!=', Auth::id())->get();
         return view('treats.index', compact('myTreats', 'othersTreats'));
     }
@@ -29,6 +31,7 @@ class TreatController extends Controller
      */
     public function create()
     {
+        // 新規投稿画面を表示
         return view('treats.create');
     }
 
@@ -37,17 +40,26 @@ class TreatController extends Controller
      */
     public function store(StoreTreatRequest $request)
     {
+        // 全リクエストデータを取得
         $date = $request->all();
+
+        // リクエストから画像ファイルを取得
         $image = $request->file('image');
+
         try {
+            // 画像ファイルをS3にアップロードし、そのパスを取得
             $path = Storage::disk('s3')->putFile('treats', $image);
+
+            // アップロードした画像のURLを取得
             $filePath = Storage::disk('s3')->url($path);
         } catch (\Exception $e) {
-            // 例外が発生した場合、そのメッセージをddで表示します
             dd($e->getMessage());
         }
+
+        // UUIDを生成してURLに設定
         $data['url'] = Str::uuid();
 
+        // データベースに新しいTreatを作成
         $treat = Treat::create([
             'location_id' => $date['location_id'],
             'shelf_life_id' => $date['shelf_life_id'],
@@ -59,19 +71,8 @@ class TreatController extends Controller
             'user_id' => auth()->user()->id,
         ]);
 
+        // リダイレクト
         return redirect()->back();
-
-        // // その他から追加されたときShelfLifeやLocationにも挿入する
-        // $shelfLife = ShelfLife::create([
-        //     'treat_id' => $treat->id,
-        //     'shelf_life' => $date['shelf_life_id'],
-        //     'shelf_life_status' => 1,
-        // ]);
-
-        // $location = Location::create([
-        //     'treat_id' => $treat->id,
-        //     'location' => $date['location_id'],
-        // ]);
     }
 
     /**
@@ -85,37 +86,49 @@ class TreatController extends Controller
         $treatInterests = TreatInterest::query()->where('treat_id', '=', $treat->id)->get();
         $guestUsers = GuestUser::query()->where('treat_id', '=', $treat->id)->get();
 
+        // ログインユーザーの情報を取得
         $user = Auth::user();
 
         if ($user && $user->id === $treat->user_id) {
             // 投稿した本人の場合
             $userCategory = "author";
+
             return view('treats.show', compact('userCategory', 'treat', 'treatInterests', 'guestUsers'));
         } else if (!$user) {
-            // ゲストユーザーの場合
-            // $userCategory = "guest";も投げるべき
-            // 現在の閲覧者が既にguestUserに存在するかどうか
+            // ゲストユーザー(未ログイン)の場合
+            // ゲストユーザーとDBに保存されているセッションIDを取得
             $currentUserSessionId = session()->getId();
             $guestUserSessionIds = $guestUsers->pluck('session_id');
+            // 現在の閲覧者が既にguestUserに登録されているか確認
             $guestUserExists = $guestUserSessionIds->contains($currentUserSessionId);
+
             if ($guestUserExists) {
+                // 存在する場合、そのステータスを取得
                 $guestUserStatus = $guestUsers->where('session_id', $currentUserSessionId)->first();
             } else {
+                // 存在しない場合、nullを代入
                 $guestUserStatus = null;
             }
+
             return view('treats.show', compact('treat',  'guestUserExists', 'guestUserStatus'));
         } else {
-            // 投稿した本人ではない場合
+            // 投稿した本人ではない場合(ログイン済みの場合)
             $userCategory = "interest";
-            // 現在の閲覧者が既にtreatInterestに存在するかどうか
+            // treatInterestのuser_idを全て取得
             $treatInterestUserIds = $treatInterests->pluck('user_id');
+            // 現在の閲覧者が既にtreatInterestに登録されているか確認
             $treatInterestExists = $treatInterestUserIds->contains($user->id);
+
             if ($treatInterestExists) {
+                // 存在する場合、そのステータスを取得
                 $treatInterestStatus = $treatInterests->where('user_id', $user->id)->first();
             } else {
+                // 存在しない場合、nullを代入
                 $treatInterestStatus = null;
             }
+
             dump($treatInterestExists);
+
             return view('treats.show', compact('userCategory', 'treat', 'treatInterestExists', 'treatInterestStatus'));
         }
     }
@@ -147,26 +160,43 @@ class TreatController extends Controller
     public function updateApprovalStatus(Request $request, Treat $treat)
     {
         $requestDate = $request->all();
-        $treatId = $treat->id;
-        dump($requestDate);
 
+        // TreatのIDを取得
+        $treatId = $treat->id;
+
+        // Treatに紐づく全てのGuestUserを取得
         foreach (GuestUser::where('treat_id', '=', $treatId)->get() as $guestUser) {
+            // GuestUserのsession_idを取得
             $sessionIdOfModel = $guestUser->session_id;
+
+            // トグルボタンの状態によって'status'を'approve'か'reject'に設定
             $status = isset($requestDate['guestUser'][$sessionIdOfModel]) ? 'approve' : 'reject';
+
+            // チェックボックスがチェックされている場合は'status'を'pending'に設定
             if (isset($requestDate['guestUserPendingStatus'][$sessionIdOfModel])) {
                 $status = 'pending';
             }
+
+            // GuestUserの'status'を更新
             $guestUser->update([
                 'status' => $status,
             ]);
         }
 
+        // Treatに紐づく全てのTreatInterestを取得
         foreach (TreatInterest::where('treat_id', '=', $treatId)->get() as $treatInterest) {
+            // TreatInterestのuser_idを取得
             $userIdOfModel = $treatInterest->user_id;
+
+            // トグルボタンの状態によって'status'を'approve'か'reject'に設定
             $status = isset($requestDate['treatInterest'][$userIdOfModel]) ? 'approve' : 'reject';
+
+            // チェックボックスがチェックされている場合は'status'を'pending'に設定
             if (isset($requestDate['treatInterestPendingStatus'][$userIdOfModel])) {
                 $status = 'pending';
             }
+
+            // TreatInterestの'status'を更新
             $treatInterest->update([
                 'status' => $status,
             ]);
