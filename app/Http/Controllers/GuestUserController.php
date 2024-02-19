@@ -33,13 +33,15 @@ class GuestUserController extends Controller
         $data = $request->all();
         dump($data);
         $treat_id = $treat->id;
+        // 閲覧者(未登録ユーザー)のセッションIDを取得
         $sessionId = $request->session()->getId();
 
         $guestUser = GuestUser::create([
             'nickname' => $data['nickname'],
             'session_id' => $sessionId,
             'treat_id' => $treat_id,
-            'status' => 'approve',
+            // 規定値をpendingに設定
+            'status' => 'pending',
         ]);
 
         return redirect()->back();
