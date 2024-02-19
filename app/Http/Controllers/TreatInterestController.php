@@ -33,11 +33,13 @@ class TreatInterestController extends Controller
     public function store(StoreTreatInterestRequest $request, Treat $treat)
     {
         $treatId = $treat->id;
+        // 閲覧者のユーザーIDを取得
         $userId = Auth::user()->id;
 
         $guestUser = TreatInterest::create([
             'user_id' => $userId,
             'treat_id' => $treatId,
+            // 規定値をpendingに設定
             'status' => 'pending',
         ]);
 
