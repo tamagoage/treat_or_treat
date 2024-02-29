@@ -63,7 +63,7 @@ class TreatController extends Controller
         $treat = Treat::create([
             'location_id' => $date['location_id'],
             'shelf_life_id' => $date['shelf_life_id'],
-            'image' => $filePath,
+            'image' => $path,
             'name' => $date['name'],
             'made_date' => $date['made_date'],
             'pickup_deadline' => $date['pickup_deadline'],
@@ -82,6 +82,13 @@ class TreatController extends Controller
     {
         // 選択されたtreatのidと同じものを取得
         $treat = Treat::query()->where('id', '=', $treat->id)->first();
+
+        // 署名付きURLを取得
+        $treat->image = Storage::disk('s3')->temporaryUrl(
+            $treat->image,
+            now()->addMinutes(60)
+        );
+
         // treatのidに紐づくtreat_interest,guest_userを取得
         $treatInterests = TreatInterest::query()->where('treat_id', '=', $treat->id)->get();
         $guestUsers = GuestUser::query()->where('treat_id', '=', $treat->id)->get();
